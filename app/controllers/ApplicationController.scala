@@ -5,10 +5,10 @@ import play.api.mvc._
 import com.fasterxml.jackson.databind.node._
 import play.db.jpa.JPA
 import scala.collection.JavaConverters._
-
 import org.hibernate.criterion.Restrictions
 import org.hibernate.criterion.Projections
 import org.hibernate.criterion.Order
+import scala.reflect.Manifest
 
 
 object ApplicationController extends Controller {
@@ -31,6 +31,8 @@ object ApplicationController extends Controller {
 	}
 
 	def delete(id: Int) = Action { implicit request =>
+		val repo = new UserRepository()
+		repo.delete(id);
 		Ok("okay i deleted user with id " + id)
 	}
 
@@ -81,6 +83,15 @@ trait Repository[Bean, Model] {
 		beans
 	}
 
+	def delete(id: Int)(implicit manifest: Manifest[Bean]) {
+		val em = JPA.em("default")
+		em.getTransaction().begin()
+
+		val bean = em.find(manifest.erasure.asInstanceOf[Class[Bean]], id)
+		em.remove(bean)
+
+		em.getTransaction().commit()
+	}
 
 	def getDataTableJson(queryString: Map[String, Seq[String]], adapter: Adapter[Bean, Model]
 		): com.fasterxml.jackson.databind.node.ObjectNode = {

@@ -16,13 +16,16 @@
 	<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script> 
 	<!-- DataTables -->
 	<script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.min.js"></script>
+	<script type="text/javascript" charset="utf8" src="@routes.Assets.at("javascripts/dataTables.fnReloadAjax.js")"></script>
+	
 
 </head>
 <body>
 
 	<script type="text/javascript">
+		var oTable;
 		$(document).ready(function() {
-			$("#user-table").dataTable( {
+			oTable = $("#user-table").dataTable( {
 				"bProcessing": true,
 				"aaSorting": [[ 0, "asc" ]],
 				"bServerSide": true,
@@ -34,6 +37,8 @@
 
 
 	<h1>Users</h1>
+
+	<button id="create-button">Create New User</button>
 
 	<table id="user-table" class="display">
 		<thead>
@@ -64,12 +69,17 @@
 	
 	<script>
 
+	$("#create-button").click(function () {
+		alert("create");
+	});
+
+
 		$("#user-table").on("click", '.delete', function (event) {
 			if (confirm("Are you sure?")) {
 				var userId = $(this).attr('itemId');
 				$.ajax(jsRoutes.controllers.ApplicationController.delete(userId))
 					.done(function (data) {
-						alert(data);
+						oTable.fnReloadAjax();
 					})
 					.fail(function () {
 						alert("Network or system error: User not deleted!") 
