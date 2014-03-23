@@ -38,7 +38,32 @@
 
 	<h1>Users</h1>
 
-	<button id="create-button">Create New User</button>
+	<!-- Button trigger modal -->
+	<button data-toggle="modal" data-target="#myModal">
+		Create New User
+	</button>
+	
+	<!-- Modal -->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">Create New User</h4>
+				</div>
+				<div class="modal-body">
+
+					Name: <input type="text" id="create-name"/><br />
+					Phone: <input type="text" id="create-phone" /><br />
+
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+					<button type="button" class="btn btn-primary" data-dismiss="modal" id="create-button" >Create</button>
+				</div>
+			</div>
+		</div>
+	</div>
 
 	<table id="user-table" class="display">
 		<thead>
@@ -64,13 +89,21 @@
 		routes.javascript.ApplicationController.create,
 		routes.javascript.ApplicationController.delete
 	)
-	
-	
-	
+
 	<script>
 
 	$("#create-button").click(function () {
-		alert("create");
+		var name = $("#create-name").val()
+		var phone = $("#create-phone").val()
+
+		$.ajax(jsRoutes.controllers.ApplicationController.create(name, phone))
+		.done(function (data) {
+			oTable.fnReloadAjax();
+		})
+		.fail(function () {
+			alert("Network or system error: User not deleted!") 
+		});
+
 	});
 
 

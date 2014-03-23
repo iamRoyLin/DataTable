@@ -26,8 +26,12 @@ object ApplicationController extends Controller {
 		Ok(json.toString)
 	}
 
-	def create() = Action { implicit request =>
-		Ok("")
+	def create(name: String, phone: String) = Action { implicit request =>
+		
+		val repo = new UserRepository()
+		repo.create(new beans.User(name, phone))
+		
+		Ok("your name is " + name + " and phone is " + phone + "!")
 	}
 
 	def delete(id: Int) = Action { implicit request =>
@@ -83,6 +87,16 @@ trait Repository[Bean, Model] {
 		beans
 	}
 
+	def create(bean: Bean) {
+		val em = JPA.em("default")
+		em.getTransaction().begin()
+
+		em.persist(bean);
+	
+		em.getTransaction().commit()
+	}
+
+	
 	def delete(id: Int)(implicit manifest: Manifest[Bean]) {
 		val em = JPA.em("default")
 		em.getTransaction().begin()

@@ -6,7 +6,7 @@
 GET     /                           controllers.ApplicationController.index
 
 GET		/list						controllers.ApplicationController.list
-GET		/list						controllers.ApplicationController.create
+GET		/create						controllers.ApplicationController.create(name: String, phone: String)
 DELETE	/delete/:id					controllers.ApplicationController.delete(id: Int)
 
 # Map static resources from the /public folder to the /assets URL path

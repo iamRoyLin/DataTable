@@ -10,6 +10,12 @@ import org.hibernate.annotations.CascadeType
 @Entity
 class User {
 
+	def this(name: String, phone: String) = {
+		this()
+		this.setName(name)
+		this.setPhone(phone)
+	}
+
 	@Id
 	@GeneratedValue
 	@BeanProperty
