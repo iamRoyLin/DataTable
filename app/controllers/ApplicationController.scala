@@ -13,17 +13,25 @@ import org.hibernate.criterion.Order
 
 object ApplicationController extends Controller {
 
-	def index = Action {
-		Ok(views.html.index())
+	def index = Action { implicit request =>
+		Ok(views.html.index(request))
 	}
 
-	def list = Action { request =>
+	def list = Action { implicit request =>
 
 		val repo = new UserRepository()
 		repo.setFilter(request.queryString("sSearch")(0))
 		val json = repo.getDataTableJson(request.queryString, UserAdapter)
 
 		Ok(json.toString)
+	}
+
+	def create() = Action { implicit request =>
+		Ok("")
+	}
+
+	def delete(id: Int) = Action { implicit request =>
+		Ok("okay i deleted user with id " + id)
 	}
 
 }
@@ -66,7 +74,6 @@ trait Repository[Bean, Model] {
 				criteria.addOrder( Order.desc(sortColumn) )
 			}
 		}
-
 
 		val beans: List[Bean] = criteria.list.asScala.toList map (_.asInstanceOf[Bean])
 		em.getTransaction().commit()
