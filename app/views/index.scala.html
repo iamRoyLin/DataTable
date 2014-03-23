@@ -1,0 +1,83 @@
+@()
+
+
+<!DOCTYPE html>
+<html>
+<head>
+
+
+	<!-- DataTables CSS -->
+	<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/datatables/1.9.4/css/demo_table.min.css">
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+	<!-- jQuery -->
+	<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+	<!-- Bootstrap -->
+	<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script> 
+	<!-- DataTables -->
+	<script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.min.js"></script>
+
+</head>
+<body>
+
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$("#user-table").dataTable( {
+				"bProcessing": true,
+				"aaSorting": [[ 0, "asc" ]],
+				"bServerSide": true,
+				"sPaginationType": "full_numbers",
+				"sAjaxSource": "@routes.ApplicationController.list()"
+			});
+		});
+	</script>
+
+
+	<h1>Users</h1>
+
+	<table id="user-table" class="display">
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>Name</th>
+				<th>Phone</th>
+				<th>Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>Row 1 Data 1</td>
+				<td>Row 1 Data 2</td>
+				<td>etc</td>
+				<td>etc</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<script>
+		/*
+		function remove(id) {
+			alert(id);
+		}
+
+		function edit(id) {
+			alert(id);
+		}
+		*/
+
+		$("#user-table").on("click", '.delete', function (event) {
+	    if (confirm("Are you sure?")) {
+        alert("deleted!");
+    }
+    return false;
+			
+			alert($(this).attr('itemId'));
+		});
+
+
+	</script>
+
+</body>
+</html>
+
+
